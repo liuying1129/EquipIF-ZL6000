@@ -83,6 +83,7 @@ var
   EquipChar:string;
   MrConnStr:string;
   ifConnSucc:boolean;
+  EquipUnid:integer;//设备唯一编号
 
   hnd:integer;
   bRegister:boolean;
@@ -217,11 +218,12 @@ begin
 
   autorun:=ini.readBool(IniSection,'开机自动运行',false);
 
-  GroupName:=trim(ini.ReadString(IniSection,'组别',''));
+  GroupName:=trim(ini.ReadString(IniSection,'工作组',''));
   EquipChar:=trim(uppercase(ini.ReadString(IniSection,'仪器字母','')));//读出来是大写就万无一失了
   SpecType:=ini.ReadString(IniSection,'默认样本类型','');
   SpecStatus:=ini.ReadString(IniSection,'默认样本状态','');
   CombinID:=ini.ReadString(IniSection,'组合项目代码','');
+  EquipUnid:=ini.ReadInteger(IniSection,'设备唯一编号',-1);
 
   LisFormCaption:=ini.ReadString(IniSection,'检验系统窗体标题','');
 
@@ -300,13 +302,14 @@ begin
   if LoadInputPassDll then
   begin
     ss:='连接仪器数据库'+#2+'DBConn'+#2+#2+'1'+#2+#2+#3+
-      '组别'+#2+'Edit'+#2+#2+'1'+#2+#2+#3+
+      '工作组'+#2+'Edit'+#2+#2+'1'+#2+#2+#3+
       '仪器字母'+#2+'Edit'+#2+#2+'1'+#2+#2+#3+
       '检验系统窗体标题'+#2+'Edit'+#2+#2+'1'+#2+#2+#3+
       '默认样本类型'+#2+'Edit'+#2+#2+'1'+#2+#2+#3+
       '默认样本状态'+#2+'Edit'+#2+#2+'1'+#2+#2+#3+
       '组合项目代码'+#2+'Edit'+#2+#2+'1'+#2+#2+#3+
       '开机自动运行'+#2+'CheckListBox'+#2+#2+'1'+#2+#2+#3+
+      '设备唯一编号'+#2+'Edit'+#2+#2+'1'+#2+#2+#3+
       '高值质控联机号'+#2+'Edit'+#2+#2+'2'+#2+#2+#3+
       '常值质控联机号'+#2+'Edit'+#2+#2+'2'+#2+#2+#3+
       '低值质控联机号'+#2+'Edit'+#2+#2+'2'+#2+#2+#3;
@@ -445,7 +448,13 @@ begin
         sName+'{!@#}'+sSex+'{!@#}{!@#}'+sAge+'{!@#}'+sBLH+'{!@#}'+sKB+'{!@#}'+sSJYS+'{!@#}'+sBedNo+'{!@#}'+sLCZD+'{!@#}{!@#}'+sJYYS,
         (LisFormCaption),(ConnectString),
         (QuaContSpecNoG),(QuaContSpecNo),(QuaContSpecNoD),'',
-        true,true,'常规');
+        true,true,'常规',
+        '',
+        EquipUnid,
+        '','','','',
+        -1,-1,-1,-1,
+        -1,-1,-1,-1,
+        false,false,false,false);
       if not VarIsEmpty(FInts) then FInts:= unAssigned;
     end;
 
